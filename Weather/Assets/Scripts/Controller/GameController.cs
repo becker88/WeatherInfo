@@ -29,15 +29,26 @@ namespace WheelOfFortune
     /// </summary>
     public class GameController : Controller<ApplicationGameManager>
     {
-        private byte[] rawData = null;
+        private byte[] rawData      = null;
+        private string baseURL      = "http://api.weatherstack.com/";
+        private string curObserve   = "current?";
+        private string accessKey    = "access_key=fb5b798ccedcb92923e9662b89363042&";
+        private string queryInfo    = "query=";
+
+        string JSON_Name;
+        string JSON_Country;
+        string JSON_Region;
+        string JSON_LocalTime;
+        float JSON_Temperature;
+        string JSON_Weather;
+        string path;
+        string Url;
+        string temperature;
 
         // Use this for initialization
         void Start()
         {
-            if ((Application.internetReachability != NetworkReachability.NotReachable))
-            {
-
-            }
+            StartCoroutine("FetchWeatherData", "");
         }
 
         // Update is called once per frame
@@ -47,22 +58,35 @@ namespace WheelOfFortune
         }
 
         /// <summary>
+        /// On Click Function to fetch weather data
+        /// </summary>
+        public void WeatherGo()
+        {
+            if ((Application.internetReachability != NetworkReachability.NotReachable))
+            {
+                StartCoroutine("FetchWeatherData","delhi");
+            }
+        }
+
+        /// <summary>
         /// Fetchs the master data.
         /// </summary>
         /// <returns>The master data.</returns>
-        IEnumerator FetchMasterData()
+        IEnumerator FetchWeatherData(string cityInfo)
         {
             //title.text = "Configuring for the first time...please be patient";
             float startTime = Time.realtimeSinceStartup;
 
             WWWForm wwwform = new WWWForm();
             rawData = null;
-            WWW www = new WWW(("http://api.weatherstack.com/current?access_key=fb5b798ccedcb92923e9662b89363042&query=Kolkata"), rawData);
+            WWW www = new WWW(("http://api.weatherstack.com/current?access_key=fb5b798ccedcb92923e9662b89363042&query=delhi"), rawData);
+            //WWW www = new WWW((baseURL+curObserve+accessKey+queryInfo+cityInfo), rawData);
             yield return www;
 
             if (string.IsNullOrEmpty(www.error))
             {
                 Debug.Log(www.text);
+                ParseWeatherAPI(www.text);
             }
             else
             {
@@ -71,6 +95,63 @@ namespace WheelOfFortune
             float elapsedTime = Time.realtimeSinceStartup - startTime;
             Debug.Log("Total Download Time:" + elapsedTime.ToString());
 
+        }
+
+        /// <summary>
+        /// After getting weather Data it will be parse and Disply Properly
+        /// </summary>
+        public void ParseWeatherAPI(string weatherData)
+        {
+            //JsonData jsonWeather = JsonMapper.ToObject(weatherData);
+            _Particle fields = JsonUtility.FromJson<_Particle>(weatherData);
+            JSON_Name = fields.location.name;
+            JSON_Country = fields.location.country;
+            JSON_Region = fields.location.region;
+            JSON_LocalTime = fields.location.localTime;
+            //JSON_Weather = fields.current.condition.data;
+            JSON_Temperature = fields.current.temp_c;
+            Debug.Log(JSON_Name);
+            Debug.Log(JSON_Country);
+            Debug.Log(JSON_Region);
+            Debug.Log(JSON_LocalTime);
+            //Debug.Log(JSON_Weather);
+            Debug.Log(JSON_Temperature);
+        }
+
+        [System.Serializable]
+        public class _condition
+        {
+            public string data;
+
+        }
+
+        [System.Serializable]
+        public class _location
+        {
+            public string name;
+            public string country;
+            public string region;
+            public string localTime;
+
+        }
+
+        [System.Serializable]
+        public class _current
+        {
+            //public _condition condition;
+            public float temp_c;
+
+        }
+
+
+        [System.Serializable]
+        public class _Particle
+        {
+            public _condition condition;
+            public _location location;
+            public _current current;
+            public string temp;
+            public string main;
         }
     }
 }

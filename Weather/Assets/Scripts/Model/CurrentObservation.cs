@@ -18,48 +18,47 @@
 // </copyright>
 
 using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Becker.MVC;
 
 namespace WheelOfFortune
 {
-    [SerializeField]
+    [Serializable]
     public class CurrentObservation : Model<ApplicationGameManager>
     {
 
-        private int _temperature;
-        private int _precipitation;
-        private int _humidity;
-        private int _windSpeed;
-        private int _windDirection;
-        private int _windDegree;
-        private int _pressure;
+        private string _temperature;
+        private string _precipitation;
+        private string _humidity;
+        private string _windSpeed;
+        private string _pressure;
 
         /// <summary>
         /// Get and Set Temperature
         /// </summary>
-        public int Temperature { get { return _temperature; } set { _temperature = value; } }
+        public string Temperature { get { return _temperature; } set { _temperature = value; } }
 
         /// <summary>
         /// Get and Set Precipitation
         /// </summary>
-        public int Precipitation { get { return _precipitation; } set { _precipitation = value; } }
+        public string Precipitation { get { return _precipitation; } set { _precipitation = value; } }
 
         /// <summary>
         /// Get and Set Humidity
         /// </summary>
-        public int Humidity { get { return _humidity; } set { _humidity = value; } }
+        public string Humidity { get { return _humidity; } set { _humidity = value; } }
 
         /// <summary>
         /// Get and Set WindSpeed
         /// </summary>
-        public int WindSpeed { get { return _windSpeed; } set { _windSpeed = value; } }
+        public string WindSpeed { get { return _windSpeed; } set { _windSpeed = value; } }
 
         /// <summary>
         /// Get and Set Pressure
         /// </summary>
-        public int Pressure { get { return _pressure; } set { _pressure = value; } }
+        public string Pressure { get { return _pressure; } set { _pressure = value; } }
 
     }
 }

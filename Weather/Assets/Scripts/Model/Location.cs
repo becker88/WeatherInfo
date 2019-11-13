@@ -18,17 +18,25 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using Becker.MVC;
 
 namespace WheelOfFortune
 {
-    [SerializeField]
+    [Serializable]
     public class Location : Model<ApplicationGameManager>
     {
         private string location;
         private string country;
         private string localTime;
+        private Location m_locationInfo;
+
+
+        /// <summary>
+        /// Reference to the Location Info Model.
+        /// </summary>
+        public Location locationInfo { get { return m_locationInfo = Assert<Location>(m_locationInfo); } }
 
         /// <summary>
         /// Get and Set Location

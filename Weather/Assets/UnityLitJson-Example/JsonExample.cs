@@ -131,7 +131,7 @@ public class JsonExample : MonoBehaviour {
 		ExampleSerializedClass deserializedClass = JsonMapper.ToObject<ExampleSerializedClass>(savedJsonString);
 
 		Debug.Log(deserializedClass.myString);
-
+       
 	}
 
 }

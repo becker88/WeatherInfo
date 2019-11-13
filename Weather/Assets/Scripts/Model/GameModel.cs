@@ -29,28 +29,13 @@ namespace WheelOfFortune
     /// </summary>
     public class GameModel : Model<ApplicationGameManager>
     {
-        private Location m_locationInfo;
+        
         private CurrentObservation m_curObserve;
-
-        /// <summary>
-        /// Reference to the Location Info Model.
-        /// </summary>
-        public Location locationInfo { get { return m_locationInfo = Assert<Location>(m_locationInfo); } }
 
         /// <summary>
         /// Reference to the Current Weather Observation Info Model.
         /// </summary>
         public CurrentObservation curObserve { get { return m_curObserve = Assert<CurrentObservation>(m_curObserve); } }
-        // Use this for initialization
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
+        
     }
 }

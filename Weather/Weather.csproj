@@ -235,6 +235,7 @@
     <Compile Include="Assets\Scripts\Model\GameModel.cs" />
     <Compile Include="Assets\Scripts\Model\Location.cs" />
     <Compile Include="Assets\Scripts\Notification\GameEventNotification.cs" />
+    <Compile Include="Assets\Scripts\Other\Constants.cs" />
     <Compile Include="Assets\Scripts\Other\Fading.cs" />
     <Compile Include="Assets\Scripts\Other\Splash.cs" />
     <Compile Include="Assets\Scripts\Utility\Utils.cs" />
