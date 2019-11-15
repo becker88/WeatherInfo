@@ -259,6 +259,7 @@ GameObject:
   - component: {fileID: 224327854089784696}
   - component: {fileID: 222426801712813208}
   - component: {fileID: 114353232382443326}
+  - component: {fileID: 114697659614365008}
   m_Layer: 5
   m_Name: Current Weather
   m_TagString: Untagged
@@ -704,6 +705,25 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 29
+--- !u!114 &114697659614365008
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1931295248564206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f07fb36b81a2624fb3d042104516de7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  location: {fileID: 114000010076251334}
+  temperature: {fileID: 114228529232968442}
+  time: {fileID: 114433326804718474}
+  date: {fileID: 114003554141311792}
+  humidity: {fileID: 114290978357009484}
+  precipetation: {fileID: 114054260710314292}
+  windSpeed: {fileID: 114605681023402926}
+  pressure: {fileID: 114535843448909018}
 --- !u!114 &114726691644122214
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -28,17 +28,17 @@ namespace WheelOfFortune
     /// </summary>
     public class GameView : View<ApplicationGameManager>
     {
-
-        // Use this for initialization
-        void Start()
+        /// <summary>
+        /// Get weather data
+        /// </summary>
+        public void InstantiateWeatherData()
         {
-
+            Notify(GameEventNotification.CallAPI);
         }
-
-        // Update is called once per frame
-        void Update()
+        
+        public void Clear()
         {
-
+            app.model.uiComp.userInput.text = "";
         }
     }
 }

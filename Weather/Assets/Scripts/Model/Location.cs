@@ -1,4 +1,4 @@
-﻿// <copyright file="GameView.cs" company="Matrix Becker">
+﻿// <copyright file="Utils.cs" company="Matrix Becker">
 // Copyright (C) 2019 Matrix Becker. All Rights Reserved.
 //
 //@ Author: Mr. Saikat Patra
@@ -14,45 +14,29 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-// </copyright>
+// </copyright
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System;
 using UnityEngine;
-using Becker.MVC;
 
 namespace WheelOfFortune
 {
+    /// <summary>
+    /// Fetch location
+    /// </summary>
     [Serializable]
-    public class Location : Model<ApplicationGameManager>
+    public class Location
     {
-        private string location;
-        private string country;
-        private string localTime;
-        private Location m_locationInfo;
-
-
-        /// <summary>
-        /// Reference to the Location Info Model.
-        /// </summary>
-        public Location locationInfo { get { return m_locationInfo = Assert<Location>(m_locationInfo); } }
-
-        /// <summary>
-        /// Get and Set Location
-        /// </summary>
-        public string LocationArea { get { return location; } set { location = value; } }
-
-        /// <summary>
-        /// Get and Set Country
-        /// </summary>
-        public string Country { get { return country; } set { country = value; } }
-
-        /// <summary>
-        /// Get and Set Local Time
-        /// </summary>
-        public string LocalTime { get { return localTime; } set { localTime = value; } }
-
+        public string name;
+        public string country;
+        public string region;
+        public string lat;
+        public string lon;
+        public string timezone_id;
+        public string localtime;
+        public string localtime_epoch;
+        public string utc_offset;
     }
 }
-

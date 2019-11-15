@@ -29,13 +29,26 @@ namespace WheelOfFortune
     /// </summary>
     public class GameModel : Model<ApplicationGameManager>
     {
+        private string _cityInfo;
+
+        private APIDetails m_urlInfo; // Register API Info
+        private UIComp m_uiComp;
         
-        private CurrentObservation m_curObserve;
 
         /// <summary>
-        /// Reference to the Current Weather Observation Info Model.
+        /// Reference to the APIDetails Info Model.
         /// </summary>
-        public CurrentObservation curObserve { get { return m_curObserve = Assert<CurrentObservation>(m_curObserve); } }
-        
+        public APIDetails urlInfo { get { return m_urlInfo = Assert<APIDetails>(m_urlInfo); } }
+
+        /// <summary>
+        /// Reference to the UI Component.
+        /// </summary>
+        public UIComp uiComp { get { return m_uiComp = Assert<UIComp>(m_uiComp); } }
+
+        /// <summary>
+        /// Get Base URL
+        /// </summary>
+        public string CityInfo { get { return _cityInfo; } }
+
     }
 }

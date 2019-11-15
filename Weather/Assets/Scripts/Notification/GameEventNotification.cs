@@ -26,10 +26,7 @@ namespace WheelOfFortune
 public class GameEventNotification {
 
 		public const string SceneLoad     	= "scene.load";
-        public const string GameStart     	= "game.start";
-        public const string StartSpin       = "start.spinning";
-		public const string ScoreUpdate     = "score.update";
-        public const string StopSpin        = "stop.spinning";
+        public const string CallAPI     	= "call.api";
 		public const string GameOver  		= "game.over";
     }
 }

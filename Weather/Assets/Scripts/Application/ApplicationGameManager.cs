@@ -34,7 +34,7 @@ namespace WheelOfFortune
         void Awake()
         {
             Utils.IsDebugEnable = true;
-            //view.Initialize();
+            
         }
     }
 }

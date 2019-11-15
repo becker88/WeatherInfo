@@ -20,7 +20,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Becker.MVC;
-using LitJson;
 
 namespace WheelOfFortune
 {
@@ -29,42 +28,32 @@ namespace WheelOfFortune
     /// </summary>
     public class GameController : Controller<ApplicationGameManager>
     {
-        private byte[] rawData      = null;
-        private string baseURL      = "http://api.weatherstack.com/";
-        private string curObserve   = "current?";
-        private string accessKey    = "access_key=fb5b798ccedcb92923e9662b89363042&";
-        private string queryInfo    = "query=";
-
-        string JSON_Name;
-        string JSON_Country;
-        string JSON_Region;
-        string JSON_LocalTime;
-        float JSON_Temperature;
-        string JSON_Weather;
-        string path;
-        string Url;
-        string temperature;
+        private byte[] rawData  = null;
+        private string cityInfo;
+        private GameObject weatherPreab;
 
         // Use this for initialization
         void Start()
         {
-            StartCoroutine("FetchWeatherData", "");
+            app.model.uiComp.userInput.onValueChanged.AddListener(delegate
+            {
+                Debug.Log(app.model.uiComp.userInput.text);
+            });
+
+           
+            //StartCoroutine("FetchWeatherData", "mumbai");
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
+        
         /// <summary>
         /// On Click Function to fetch weather data
         /// </summary>
-        public void WeatherGo()
+        public void WeatherGo(string cityInfo)
         {
             if ((Application.internetReachability != NetworkReachability.NotReachable))
             {
-                StartCoroutine("FetchWeatherData","delhi");
+                Debug.Log(cityInfo);
+                StartCoroutine("FetchWeatherData", cityInfo);
             }
         }
 
@@ -74,13 +63,14 @@ namespace WheelOfFortune
         /// <returns>The master data.</returns>
         IEnumerator FetchWeatherData(string cityInfo)
         {
-            //title.text = "Configuring for the first time...please be patient";
+            app.model.uiComp.waitText.text = "Please wait...";
+            Destroy(weatherPreab);
             float startTime = Time.realtimeSinceStartup;
+            string apiURL = app.model.urlInfo.BaseURL + app.model.urlInfo.CurObserve + app.model.urlInfo.AccessKey + app.model.urlInfo.QueryInfo + cityInfo;
 
             WWWForm wwwform = new WWWForm();
             rawData = null;
-            WWW www = new WWW(("http://api.weatherstack.com/current?access_key=fb5b798ccedcb92923e9662b89363042&query=delhi"), rawData);
-            //WWW www = new WWW((baseURL+curObserve+accessKey+queryInfo+cityInfo), rawData);
+            WWW www = new WWW((apiURL), rawData);
             yield return www;
 
             if (string.IsNullOrEmpty(www.error))
@@ -93,6 +83,7 @@ namespace WheelOfFortune
                 print("Failure...!!!:" + www.error);
             }
             float elapsedTime = Time.realtimeSinceStartup - startTime;
+            app.model.uiComp.waitText.text = "";
             Debug.Log("Total Download Time:" + elapsedTime.ToString());
 
         }
@@ -102,56 +93,50 @@ namespace WheelOfFortune
         /// </summary>
         public void ParseWeatherAPI(string weatherData)
         {
-            //JsonData jsonWeather = JsonMapper.ToObject(weatherData);
-            _Particle fields = JsonUtility.FromJson<_Particle>(weatherData);
-            JSON_Name = fields.location.name;
-            JSON_Country = fields.location.country;
-            JSON_Region = fields.location.region;
-            JSON_LocalTime = fields.location.localTime;
-            //JSON_Weather = fields.current.condition.data;
-            JSON_Temperature = fields.current.temp_c;
-            Debug.Log(JSON_Name);
-            Debug.Log(JSON_Country);
-            Debug.Log(JSON_Region);
-            Debug.Log(JSON_LocalTime);
-            //Debug.Log(JSON_Weather);
-            Debug.Log(JSON_Temperature);
+            WeatherSerialized weatherInfo = JsonUtility.FromJson<WeatherSerialized>(weatherData);
+            string location     = weatherInfo.location.name;
+            string temp         = weatherInfo.current.temperature;
+            string dateTime     = weatherInfo.location.localtime;
+            string humidity     = weatherInfo.current.humidity.ToString();
+            string precip       = weatherInfo.current.precip.ToString();
+            string windSpeed    = weatherInfo.current.wind_speed.ToString();
+            string pressure     = weatherInfo.current.pressure.ToString();
+
+
+           
+            //Instantiate Weather Prefab
+            weatherPreab = Instantiate(app.model.uiComp.forecastPrefab);
+            weatherPreab.transform.SetParent(app.model.uiComp.parentObj);
+            weatherPreab.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
+            weatherPreab.GetComponent<RectTransform>().localPosition = new Vector3(0, -106, 0);
+            weatherPreab.GetComponent<PopulateData>().PopulateDataFetch(location, temp, dateTime, humidity, precip, windSpeed, pressure);
+
+            Debug.Log(weatherInfo.location.name);
+            Debug.Log(weatherInfo.location.country);
+            Debug.Log(weatherInfo.current.temperature);
         }
 
-        [System.Serializable]
-        public class _condition
+        /// <summary>
+        /// Handle notifications from the application.
+        /// </summary>
+        /// <param name="p_event"></param>
+        /// <param name="p_target"></param>
+        /// <param name="p_data"></param>
+        public override void OnNotification(string p_event, Object p_target, params object[] p_data)
         {
-            public string data;
+            switch (p_event)
+            {
+                case GameEventNotification.SceneLoad:
 
+                    Utils.Log("Weather Info [" + p_data[0] + "][" + p_data[1] + "] loaded");
+                    app.model.uiComp.waitText.text = "Enter City and Get Weather Report";
+                    break;
+
+                case GameEventNotification.CallAPI:
+                    WeatherGo(app.model.uiComp.userInput.text);
+                    break;
+            }
         }
 
-        [System.Serializable]
-        public class _location
-        {
-            public string name;
-            public string country;
-            public string region;
-            public string localTime;
-
-        }
-
-        [System.Serializable]
-        public class _current
-        {
-            //public _condition condition;
-            public float temp_c;
-
-        }
-
-
-        [System.Serializable]
-        public class _Particle
-        {
-            public _condition condition;
-            public _location location;
-            public _current current;
-            public string temp;
-            public string main;
-        }
     }
 }
